@@ -1,44 +1,56 @@
 (function() {
   console.log("実行を開始します");
 
-  const startTime = Date.now();
+  let isHidden = false;
 
-  function removeElements() {
-    try {
-      // 1つ目のHTML要素を削除
-      const specificFeedbacks = document.querySelectorAll('.specificfeedback');
-      specificFeedbacks.forEach(el => el.remove());
+  function toggleVisibility() {
+    // 1つ目と2つ目のHTML要素、および新しく追加された要素
+    const elements = [
+      ...document.querySelectorAll('.specificfeedback'),
+      ...document.querySelectorAll('.icon.fa.fa-check.text-success.fa-fw'),
+      ...document.querySelectorAll('.icon.fa.fa-remove.text-danger.fa-fw'),
+      ...document.querySelectorAll('.outcome.clearfix')
+    ];
 
-      // 2つ目のHTML要素を削除（正解アイコン）
-      const correctIcons = document.querySelectorAll('.icon.fa.fa-check.text-success');
-      correctIcons.forEach(el => el.remove());
-
-      // 不正解アイコンを削除
-      const incorrectIcons = document.querySelectorAll('.icon.fa.fa-remove.text-danger');
-      incorrectIcons.forEach(el => el.remove());
-
-      // 3つ目のHTML要素の属性を削除
-      const checkedInputs = document.querySelectorAll('input[type="radio"][checked="checked"]');
-      checkedInputs.forEach(el => el.removeAttribute('checked'));
-
-      // 経過時間をチェック
-      const elapsedTime = Date.now() - startTime;
-      if (elapsedTime < 1000) {
-        // 1秒経過していない場合、再度実行
-        requestAnimationFrame(removeElements);
+    elements.forEach(el => {
+      if (isHidden) {
+        // 非表示状態から表示状態へ
+        el.style.display = '';
       } else {
-        console.log("実行を終了します。");
+        // 表示状態から非表示状態へ
+        el.style.display = 'none';
       }
-    } catch (error) {
-      console.error("エラーが発生しました:", error);
-    }
+    });
+
+    // 3つ目のHTML要素（checked属性のみ）
+    const radioInputs = document.querySelectorAll('input[type="radio"]');
+    radioInputs.forEach(el => {
+      if (isHidden) {
+        // 非表示状態から表示状態へ
+        if (el.hasAttribute('data-was-checked')) {
+          el.setAttribute('checked', 'checked');
+          el.removeAttribute('data-was-checked');
+        }
+      } else {
+        // 表示状態から非表示状態へ
+        if (el.hasAttribute('checked')) {
+          el.setAttribute('data-was-checked', 'true');
+          el.removeAttribute('checked');
+        }
+      }
+    });
+
+    isHidden = !isHidden;
+    console.log(isHidden ? "要素を隠しました。" : "要素を表示しました。");
   }
 
-  // 初回実行
-  requestAnimationFrame(removeElements);
+  // F2キーのイベントリスナーを追加
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'F2') {
+      event.preventDefault(); // デフォルトのF2キーの動作を防止
+      toggleVisibility();
+    }
+  });
 
-  // 1秒後に強制終了
-  setTimeout(() => {
-    console.log("1秒が経過したため、実行を終了します。");
-  }, 1000);
+  console.log("実行を終了します。");
 })();

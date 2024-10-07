@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Moodleクイズレビュークリーナー",
+  "version": "1.0",
+  "description": "Moodleのクイズレビューページから特定の要素を削除します",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*/mod/quiz/review.php*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_title": "Moodleクイズレビュークリーナー"
+  }
+}

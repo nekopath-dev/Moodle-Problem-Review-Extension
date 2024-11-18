@@ -1,56 +1,61 @@
 (function() {
+  // スクリプトの開始をログ出力
   console.log("実行を開始します");
 
+  // 要素の表示・非表示を管理するフラグ
   let isHidden = false;
 
+  // 要素の表示・非表示を切り替える関数を定義
   function toggleVisibility() {
-    // 1つ目と2つ目のHTML要素、および新しく追加された要素
+    // 対象となるHTML要素を取得
     const elements = [
-      ...document.querySelectorAll('.specificfeedback'),
-      ...document.querySelectorAll('.icon.fa.fa-check.text-success.fa-fw'),
-      ...document.querySelectorAll('.icon.fa.fa-remove.text-danger.fa-fw'),
-      ...document.querySelectorAll('.outcome.clearfix')
+      ...document.querySelectorAll('.specificfeedback'), // 特定のフィードバック要素
+      ...document.querySelectorAll('.icon.fa.fa-check.text-success.fa-fw'), // 正解アイコン
+      ...document.querySelectorAll('.icon.fa.fa-remove.text-danger.fa-fw'), // 不正解アイコン
+      ...document.querySelectorAll('.outcome.clearfix') // 結果表示要素
     ];
 
+    // 各要素の表示・非表示を切り替え
     elements.forEach(el => {
       if (isHidden) {
-        // 非表示状態から表示状態へ
-        el.style.display = '';
+        el.style.display = ''; // 要素を表示
       } else {
-        // 表示状態から非表示状態へ
-        el.style.display = 'none';
+        el.style.display = 'none'; // 要素を非表示
       }
     });
 
-    // 3つ目のHTML要素（checked属性のみ）
+    // ラジオボタンのchecked属性を管理
     const radioInputs = document.querySelectorAll('input[type="radio"]');
     radioInputs.forEach(el => {
       if (isHidden) {
         // 非表示状態から表示状態へ
         if (el.hasAttribute('data-was-checked')) {
-          el.setAttribute('checked', 'checked');
+          el.setAttribute('checked', 'checked'); // チェックを復元
           el.removeAttribute('data-was-checked');
         }
       } else {
         // 表示状態から非表示状態へ
         if (el.hasAttribute('checked')) {
-          el.setAttribute('data-was-checked', 'true');
-          el.removeAttribute('checked');
+          el.setAttribute('data-was-checked', 'true'); // チェック状態を一時保存
+          el.removeAttribute('checked'); // チェックを外す
         }
       }
     });
 
+    // 表示状態のフラグを反転
     isHidden = !isHidden;
+    // 現在の状態をログ出力
     console.log(isHidden ? "要素を隠しました。" : "要素を表示しました。");
   }
 
-  // F2キーのイベントリスナーを追加
+  // F2キーの押下を検知し、イベントリスナーを追加
   document.addEventListener('keydown', function(event) {
     if (event.key === 'F2') {
       event.preventDefault(); // デフォルトのF2キーの動作を防止
-      toggleVisibility();
+      toggleVisibility(); // 表示・非表示を切り替え
     }
   });
 
+  // スクリプトの終了をログ出力
   console.log("実行を終了します。");
 })();

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Moodleクイズレビュークリーナー",
-  "version": "2.0",
+  "version": "2.1",
   "description": "Moodleのクイズレビューページから回答の表示・非表示を選択できます。",
   "permissions": [
     "activeTab",

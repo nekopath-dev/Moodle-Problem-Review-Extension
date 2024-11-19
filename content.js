@@ -12,7 +12,8 @@
       ...document.querySelectorAll('.specificfeedback'), // 特定のフィードバック要素
       ...document.querySelectorAll('.icon.fa.fa-check.text-success.fa-fw'), // 正解アイコン
       ...document.querySelectorAll('.icon.fa.fa-remove.text-danger.fa-fw'), // 不正解アイコン
-      ...document.querySelectorAll('.outcome.clearfix') // 結果表示要素
+      ...document.querySelectorAll('.outcome.clearfix'), // 結果表示要素
+      ...document.querySelectorAll('option[selected="selected"]') // 選択された<option>要素
     ];
 
     // 各要素の表示・非表示を切り替え
@@ -21,6 +22,32 @@
         el.style.display = ''; // 要素を表示
       } else {
         el.style.display = 'none'; // 要素を非表示
+      }
+    });
+
+    // <option>要素の表示・非表示を切り替え
+    const optionElements = document.querySelectorAll('option[selected="selected"]');
+    optionElements.forEach(el => {
+      if (isHidden) {
+        el.style.visibility = ''; // 要素を表示
+      } else {
+        el.style.visibility = 'hidden'; // 要素を非表示
+      }
+    });
+
+    // <option>要素のテキストを管理
+    const optionElementsText = document.querySelectorAll('option[selected="selected"]');
+    optionElementsText.forEach(el => {
+      if (isHidden) {
+        // 非表示状態から表示状態へ
+        if (el.hasAttribute('data-original-text')) {
+          el.textContent = el.getAttribute('data-original-text'); // テキストを復元
+          el.removeAttribute('data-original-text');
+        }
+      } else {
+        // 表示状態から非表示状態へ
+        el.setAttribute('data-original-text', el.textContent); // 元のテキストを保存
+        el.textContent = ''; // テキストを消す
       }
     });
 
